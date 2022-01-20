@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google login</title>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://unpkg.com/jwt-decode/build/jwt-decode.js"></script>
+
+    <script>
+        function handleCredentialResponse(response) {
+            const data = jwt_decode(response.credential)
+
+            fullname.textContent = data.name
+            sub.textContent = data.sub
+            given_name.textContent = data.given_name
+            family_name.textContent = data.family_name
+            email.textContent = data.email
+            picture.setAttribute("src", data.picture)
+        }
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "SEU_CLIENT_ID",
+                callback: handleCredentialResponse
+            });
+            google.accounts.id.renderButton(
+                document.getElementById("buttonDiv"),
+                {
+                    theme:
+                        "outline",
+                    size: "large",
+                    shape: "rectangular",
+                    theme: "filled_blue",
+                    text: "signin_with",
+                    size: "large",
+                    locale: "en-US",
+                    logo_alignment: "left"
+
+                }  // customization attributes
+            );
+            google.accounts.id.prompt(); // also display the One Tap dialog
+        }
+    </script>
+
+</head>
+
+<body>
+    <div id="buttonDiv"></div>
+
+    <p id="fullname"></p>
+    <p id="sub"></p>
+    <p id="given_name"></p>
+    <p id="family_name"></p>
+    <p id="email"></p>
+    <img id="picture" />
+</body>
+
+</html>
